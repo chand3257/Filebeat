@@ -1,0 +1,27 @@
+PUT _ingest/pipeline/kube-notification-logs
+{
+  "description": "Notification level logs",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [
+          "%{TIMESTAMP_ISO8601:notification.log.timestamp},%{NUMBER} \\[%{HOSTNAME:notification.POD.NAME}\\] \\[%{DATA:notification.threadID}\\] %{LOGLEVEL:notification.log.level} (%{JAVACLASS:notification.log.class}|)(?m) %{GREEDYDATA:notification.log.message}"
+        ]
+      }
+    },
+    {
+      "remove": {
+        "field": "message"
+      }
+    }
+  ],
+  "on_failure": [
+    {
+      "set": {
+        "field": "error.message",
+        "value": "{{ _ingest.on_failure_message }}"
+      }
+    }
+  ]
+}
