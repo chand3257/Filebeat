@@ -1,0 +1,27 @@
+PUT _ingest/pipeline/kube-audit-logs
+{
+  "description": "Audit level logs",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [
+          "%{TIMESTAMP_ISO8601:audit.log.timestamp},%{NUMBER} \\[%{HOSTNAME:audit.POD.NAME}\\] \\[%{DATA:audit.threadID}\\] %{LOGLEVEL:audit.log.level} (%{JAVACLASS:audit.log.class}|)(?m) %{GREEDYDATA:audit.log.message}"
+        ]
+      }
+    },
+    {
+      "remove": {
+        "field": "message"
+      }
+    }
+  ],
+  "on_failure": [
+    {
+      "set": {
+        "field": "error.message",
+        "value": "{{ _ingest.on_failure_message }}"
+      }
+    }
+  ]
+}
