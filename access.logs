@@ -1,0 +1,51 @@
+PUT _ingest/pipeline/access-logs
+{
+  "description": "Access level logs",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [
+          """%{IPORHOST:access.log.ip} - (-|%{DATA:email}) %{DATA:access.log.auth} \[%{TIMESTAMP_ISO8601:access.log.timestamp}\] "%{WORD:access.log.verb}(?:| %{GREEDYDATA:access.log.url}) HTTP/%{NUMBER}" %{NUMBER:access.log.status} - %{DATA:access.log.refferalUrl} %{QUOTEDSTRING:access.log.user-agent} %{QUOTEDSTRING:access.log.domain} %{NUMBER:access.log.size} %{USER:access.log.requestId} \[%{DATA:access.log.threadId}\] %{WORD:level}"""
+        ]
+      }
+    },
+    {
+      "remove": {
+        "field": "message"
+      }
+    },
+    {
+      "geoip": {
+        "field": "access.log.ip"
+      }
+    },
+    {
+      "user_agent": {
+        "field": "access.log.user-agent"
+      }
+    },
+    {
+      "gsub": {
+        "field": "access.log.refferalUrl",
+        "pattern": "\"",
+        "replacement": ""
+      }
+    },
+    {
+      "gsub": {
+        "field": "access.log.user-agent",
+        "pattern": "\"",
+        "replacement": ""
+      }
+    }
+  ],
+  "on_failure": [
+    {
+      "set": {
+        "field": "error.message",
+        "value": "{{ _ingest.on_failure_message }}"
+      }
+    }
+  ]
+}
