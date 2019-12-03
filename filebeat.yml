@@ -25,7 +25,7 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /mnt/application_filebeat/nobroker/prod02.app.log
+    - /path
   
     #- c:\programdata\elasticsearch\logs\*
   pipeline: "app-logs"
@@ -76,7 +76,7 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /mnt/application_filebeat/nobroker/prod04.app.log
+    - /path
   #  level: debug
   #  review: 1
   fields:
@@ -111,7 +111,7 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /mnt/application_filebeat/nobroker/prod05.app.log
+    - /path
   #  level: debug
   #  review: 1
   fields:
@@ -146,7 +146,7 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /mnt/application_filebeat/nobroker/prod6.app.log
+    - /path
   #  level: debug
   #  review: 1
   fields:
@@ -181,7 +181,7 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /mnt/application_filebeat/nobroker/prod07.app.log
+    - /path
   #  level: debug
   #  review: 1
   fields:
@@ -213,7 +213,7 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /mnt/application_filebeat/nobroker/prod6.access.log
+    - /path
   #  level: debug review: 1
   fields:
     type: "access"
@@ -240,7 +240,7 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /mnt/application_filebeat/nobroker/prod02.access.log
+    - /path
   #  level: debug
   #  review: 1
   fields:
@@ -262,7 +262,7 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /mnt/application_filebeat/nobroker/prod04.access.log
+    - /path
   #  level: debug
   #  review: 1
   fields:
@@ -290,7 +290,7 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /mnt/application_filebeat/nobroker/prod05.access.log
+    - /path
   #  level: debug
   #  review: 1
   fields:
@@ -318,7 +318,7 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /mnt/application_filebeat/nobroker/prod07.access.log
+    - /path
   #  level: debug
   #  review: 1
   fields:
@@ -356,8 +356,8 @@ filebeat.config.modules:
 #==================== Elasticsearch template setting ==========================
 
 setup.template:
-  name: "nb-log"
-  pattern: "nb-log-*"
+  name: "filebeat-log"
+  pattern: "filebeat-log-*"
   settings.index.number_of_shards: 3
   #index.codec: best_compression
   #_source.enabled: false
@@ -400,7 +400,7 @@ setup.kibana:
   # Scheme and port can be left out and will be set to the default (http and 5601)
   # In case you specify and additional path, the scheme is required: http://localhost:5601/path
   # IPv6 addresses should always be defined as: https://[2001:db8::1]:5601
-  host: "logger:5601"
+  host: "name:5601"
 
   # Kibana Space ID
   # ID of the Kibana Space into which the dashboards should be loaded. By default,
@@ -427,8 +427,8 @@ setup.kibana:
 #-------------------------- Elasticsearch output ------------------------------
 output.elasticsearch:
   # Array of hosts to connect to.
-  hosts: ["logger:9200"]
-  index: "nb_logs-%{+YYYY-MM-dd}"
+  hosts: ["name:9200"]
+  index: "filebeat_logs-%{+YYYY-MM-dd}"
   #index: "nobroker_logs-%{+YYYY-MM-dd}"
 
   # Enabled ilm (beta) to use index lifecycle management instead daily indices.
